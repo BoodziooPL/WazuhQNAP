@@ -1,0 +1,76 @@
+<group name="remote,syslog,qnap">
+    <!--Connection-->
+    <rule id="920001" level="10">
+        <decoded_as>qnap-connection</decoded_as>
+        <status>Login Fail</status>
+        <description>QNAP user login failed.</description>
+        <mitre>
+            <id>T1110.001</id>
+        </mitre>
+    </rule>
+    <rule id="920002" level="3">
+        <decoded_as>qnap-connection</decoded_as>
+        <status>Login Success</status>
+        <description>QNAP user login succeeded.</description>
+        <mitre>
+            <id>T1078</id>
+        </mitre>
+    </rule>
+    <rule id="920003" level="3">
+        <decoded_as>qnap-connection</decoded_as>
+        <status>Logout</status>
+        <description>QNAP user logout.</description>
+    </rule>
+    <rule id="920004" level="8">
+        <decoded_as>qnap-connection</decoded_as>
+        <field name="resource">Administration</field>
+        <status>Login Success</status>
+        <description>QNAP admin login succeeded.</description>
+        <mitre>
+            <id>T1078.003</id>
+        </mitre>
+    </rule>
+    <rule id="920005" level="12" frequency="5" timeframe="300">
+        <if_matched_sid>920001</if_matched_sid>
+        <same_srcip />
+        <description>QNAP brute force (multiple failed logins by same IP).</description>
+        <mitre>
+            <id>T1110.001</id>
+        </mitre>
+    </rule>
+
+    <!--Event Log - User Management-->
+    <rule id="920011" level="7">
+        <decoded_as>qnap-eventlog</decoded_as>
+        <field name="application">Users</field>
+        <match>Created user</match>
+        <description>QNAP user created.</description>
+        <mitre>
+            <id>T1136</id>
+        </mitre>
+    </rule>
+    <rule id="920012" level="8">
+        <decoded_as>qnap-eventlog</decoded_as>
+        <field name="application">Users</field>
+        <match>Deleted user</match>
+        <description>QNAP user deleted.</description>
+        <mitre>
+            <id>T1531</id>
+        </mitre>
+    </rule>
+    <rule id="920013" level="5">
+        <decoded_as>qnap-eventlog</decoded_as>
+        <field name="application">Users</field>
+        <match>Edited the account profile</match>
+        <description>QNAP user profile modified.</description>
+        <mitre>
+            <id>T1098</id>
+        </mitre>
+    </rule>
+
+    <!--Generic Event Log-->
+    <rule id="920099" level="2">
+        <decoded_as>qnap-eventlog</decoded_as>
+        <description>QNAP generic event log.</description>
+    </rule>
+</group>
