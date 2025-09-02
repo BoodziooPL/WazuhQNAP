@@ -1,0 +1,86 @@
+<!--
+QNAP Connection Log Example:
+Sep  1 11:01:58 NAS8E49A8 qulogd[19113]: conn log: Users: Administrator, Source IP: 192.168.130.113, Computer name: ---, Connection type: HTTPS, Accessed resources: ---, Action: Logout
+Sep  1 11:01:58 NAS8E49A8 qulogd[19113]: conn log: Users: Administrator, Source IP: 192.168.130.113, Computer name: ---, Connection type: HTTPS, Accessed resources: Administration, Action: Login Success
+-->
+
+<decoder name="qnap-connection">
+  <program_name>qulogd</program_name>
+  <prematch>conn log:</prematch>
+</decoder>
+
+<decoder name="qnap-connection">
+  <parent>qnap-connection</parent>
+  <regex type="pcre2">conn log: Users: ([^,]+), Source IP: ([^,]+),</regex>
+  <order>srcuser, srcip</order>
+</decoder>
+
+<decoder name="qnap-connection">
+  <parent>qnap-connection</parent>
+  <regex type="pcre2">Connection type: ([^,]+),</regex>
+  <order>protocol</order>
+</decoder>
+
+<decoder name="qnap-connection">
+  <parent>qnap-connection</parent>
+  <regex type="pcre2">Accessed resources: ([^,]+),</regex>
+  <order>resource</order>
+</decoder>
+
+<decoder name="qnap-connection">
+  <parent>qnap-connection</parent>
+  <regex type="pcre2">Action: (.*)</regex>
+  <order>action</order>
+</decoder>
+
+<decoder name="qnap-connection">
+  <parent>qnap-connection</parent>
+  <regex type="pcre2">(Login Success)</regex>
+  <order>status</order>
+</decoder>
+
+<decoder name="qnap-connection">
+  <parent>qnap-connection</parent>
+  <regex type="pcre2">(Login Fail)</regex>
+  <order>status</order>
+</decoder>
+
+<decoder name="qnap-connection">
+  <parent>qnap-connection</parent>
+  <regex type="pcre2">(Logout)</regex>
+  <order>status</order>
+</decoder>
+
+<!--
+QNAP Event Log Example:
+Sep  1 11:01:31 NAS8E49A8 qulogd[19113]: event log: Users: Administrator, Source IP: 192.168.130.113, Computer name: ---, Application: Users, Category: General, Content: [Users] Edited the account profile of user "test".
+-->
+
+<decoder name="qnap-eventlog">
+  <program_name>qulogd</program_name>
+  <prematch>event log:</prematch>
+</decoder>
+
+<decoder name="qnap-eventlog">
+  <parent>qnap-eventlog</parent>
+  <regex type="pcre2">event log: Users: ([^,]+), Source IP: ([^,]+),</regex>
+  <order>srcuser, srcip</order>
+</decoder>
+
+<decoder name="qnap-eventlog">
+  <parent>qnap-eventlog</parent>
+  <regex type="pcre2">Application: ([^,]+),</regex>
+  <order>application</order>
+</decoder>
+
+<decoder name="qnap-eventlog">
+  <parent>qnap-eventlog</parent>
+  <regex type="pcre2">Category: ([^,]+),</regex>
+  <order>category</order>
+</decoder>
+
+<decoder name="qnap-eventlog">
+  <parent>qnap-eventlog</parent>
+  <regex type="pcre2">Content: (.*)</regex>
+  <order>content</order>
+</decoder>
